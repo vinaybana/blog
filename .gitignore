@@ -1,3 +1,5 @@
-myvenv
+myvenv/
 */__pycache__
 *.pyc
+*migrations/
+*.sqlite3
