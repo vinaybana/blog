@@ -15,18 +15,18 @@ class Category(models.Model):
 	def __str__(self):
 		return self.title
 
-#class Tag(models.Model):
-#	title = models.CharField(blank=True, max_length=200)
-#	text=models.TextField(default=True)
-#	slug=models.SlugField(max_length=70, blank=True)
-#	created_date = models.DateTimeField(default = timezone.now)
+class Tag(models.Model):
+	title = models.CharField(blank=True, max_length=200)
+	text=models.TextField(default=True)
+	slug=models.SlugField(max_length=70, blank=True)
+	created_date = models.DateTimeField(default = timezone.now)
 
-#	def __str__(self):
-#		return self.title
+	def __str__(self):
+		return self.title
 
 
 class Post(models.Model):
-#	tag = models.ManyToManyField('Tag')
+	tag = models.ManyToManyField('Tag')
 	category = models.ForeignKey('Category', null=True, blank=True, on_delete=models.CASCADE, related_query_name="posts")
 	author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 	title = models.CharField(max_length=200)
