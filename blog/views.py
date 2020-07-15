@@ -3,8 +3,7 @@ from .models import Post, Category
 from django.shortcuts import render, get_object_or_404
 from .forms import PostForm
 from django.shortcuts import redirect
-#from taggit.models import Tag
-#from django.template.defaultfilters import slugify
+
 
 
 def category_list(request):
@@ -66,15 +65,19 @@ def post_edit(request, pk):
 		form = PostForm(instance=post)
 	return render(request, 'blog/post_edit.html', {'form': form})
 
+#def tag_list(request):
+#	tags= Tag.objects.all()
+#	print(tags)
+#	return render(request, 'blog/tag_list.html', {'tags':tags})
 
-#def blog_tags(self):
-#	tags=post.Tags.all()
-#	return tags
 
-def category_post(request, pk):
-	category = get_object_or_404(Category, pk=pk)
-	print(category)
-	posts= Post.obects.filter(category=category)
+#def tag_details(request, slug):
+#	tag = get_object_or_404(Tag, slug=slug)
+#	print(tag)
+#	posts=Post.tags.filter(slug=slug)
+#	return render(request, 'blog/tag_details.html', {'posts':posts})
+
+
 	
 
 
