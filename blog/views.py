@@ -10,21 +10,21 @@ def category_list(request):
 	categories=Category.objects.all()
 	return render(request, 'blog/category_list.html', {'categories':categories})
 
-def category_detail(request,pk):
-	category = get_object_or_404(Category, pk=pk)
+def category_detail(request,slug):
+	category = get_object_or_404(Category, slug=slug)
 	print(category)
 	posts= Post.objects.filter(category=category)
-	return render(request, 'blog/category_detail.html', {'posts': posts})
+	return render(request, 'blog/category_detail.html', {'posts': posts, 'category':category})
 
-def category_edit(request, pk):
-	category = get_object_or_404(Category, pk=pk)
+def category_edit(request, slug):
+	category = get_object_or_404(Category, slug=slug)
 	if request.method == "POST":
 		form = CategoryForm(request.POST, instance=category)
 		if form.is_valid():
 			category = form.save(commit=False)
 			category.created_date = timezone.now()
 			category.save()
-			return redirect('blog:category_detail', pk=category.pk)
+			return redirect('blog:category_detail', slug=category.slug)
 	else:
 		form = CategoryForm(instance=category)
 	return render(request, 'blog/category_edit.html', {'form': form})
@@ -74,7 +74,13 @@ def tag_list(request):
 def tag_details(request, slug):
 	tag = get_object_or_404(Tag, slug=slug)
 	print(tag)
-	return render(request, 'blog/tag_details.html', {'tag':tag})
+	posts=Post.objects.filter(tag__slug=tag)
+	return render(request, 'blog/tag_details.html', {'tag':tag, 'posts': posts})
+
+
+	
+
+
 
 
 	
