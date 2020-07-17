@@ -15,7 +15,8 @@ class postAdmin(admin.ModelAdmin):
 	list_filter = ['published_date']
 	search_fields = ['title']
 
-	search_fields = ['tags__title']
+
+	filter_horizontal = ('tag',)
 
 
 admin.site.register(Post,postAdmin)
