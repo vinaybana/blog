@@ -27,6 +27,7 @@ class Tag(models.Model):
 
 class Post(models.Model):
 	tag = models.ManyToManyField('Tag')
+	cmnt=models.ForeignKey('Comment', null=True, blank=True,on_delete=models.CASCADE, related_query_name="posts")
 	category = models.ForeignKey('Category', null=True, blank=True, on_delete=models.CASCADE, related_query_name="posts")
 	author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 	title = models.CharField(max_length=200)
@@ -45,23 +46,24 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
-    post = models.ForeignKey('blog.Post', on_delete=models.CASCADE, related_name='comments')
-    author = models.CharField(max_length=200)
+    post = models.ForeignKey('Post', on_delete=models.CASCADE, related_name='comments')
+    name = models.CharField(max_length=200)
     text = models.TextField()
-    created_date = models.DateTimeField(default=timezone.now)
-    approved_comment = models.BooleanField(default=False)
+    created = models.DateTimeField(default=timezone.now)
+    updated = models.DateTimeField(auto_now=True)
+    active = models.BooleanField(default=True)
+    parent = models.ForeignKey('self', null=True, blank=True,on_delete=models.CASCADE, related_name='replies')
 
-    def approve(self):
-        self.approved_comment = True
-        self.save()
+    class Meta:
+        # sort comments in chronological order by default
+        ordering = ('created',)
 
+    
     def __str__(self):
-        return self.text
+        return 'Comment by {}'.format(self.name)
 
-def approved_comments(self):
-    return self.comments.filter(approved_comment=True)
-		
-	
+
+
 
 
 
