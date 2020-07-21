@@ -82,21 +82,31 @@ def add_comment_to_post(request, slug):
 	post = get_object_or_404(Post, slug=slug)
 	if request.method == "POST":
 		form = CommentForm(request.POST)
-		if form.is_valid():
+		if form.is_valid():	
 			parent_obj = None
+			# get parent comment id from hidden input
 			try:
-				parent_id =int(request.Post.get('parent_id'))
+				# id integer e.g. 15
+				parent_id = int(request.POST.get('comment.id'))
 			except:
-				parent_id=None
+				parent_id = None
+			# if parent_id has been submitted get parent_obj id
 			if parent_id:
-				parent_obj=Comment.objects.get(id=comment.id)
-				print(comment.id)
+				print(parent_id)
+				parent_obj = Comment.objects.get(id=parent_id)
+				# if parent object exist
 				if parent_obj:
-					replay_comment=form.save(commit=False)
-					replay_comment.parent=parent_obj
+					print(parent_obj)
+					# create replay comment object
+					replay = form.save(commit=False)
+					# assign parent_obj to replay comment
+					replay.parent = parent_obj
+					replay.save()
+
 			new_comment=form.save(commit=False)
 			new_comment.post=post
 			new_comment.save()
+			
 			return redirect('blog:post_detail', slug=post.slug)
 
 	else:
@@ -110,13 +120,6 @@ def cmnt(request, slug):
 	return cmnt
 
 
-
-	
-
-
-
-
-	
 
 
 

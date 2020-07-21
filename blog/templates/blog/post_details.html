@@ -23,16 +23,21 @@
         <strong>{{ comment.name }}</strong>
         <p>{{ comment.text|linebreaks }}</p>
 
-        
-                <a class="btn btn-default" href="{% url 'blog:add_comment_to_post' slug=post.slug %}">Add reply</a>
+            <a class="btn btn-default" href="{% url 'blog:add_comment_to_post' slug=post.slug %}">Add reply</a>
 
-                {% for replay in comment.replies.all %}
-                    <p class="info">{{ replay.name }} | {{ replay.created }}</p>
-                    <li>{{ replay.text }}</li>
-                {% endfor %}
+            {% for replay in comment.replies.all %}
+                <div class="replay">
+                    <div class="date">
+                        {{ replay.created }}
+                    </div>
+                    <strong>{{ replay.name }}</strong>
+                    <p>{{ replay.text|linebreaks }}</p>
+            {% endfor %}
 
-                <!-- Hidden input for parent comment.id -->
-                <input type="hidden" name="parent_id" value="{{ comment.id }}">
+            <!-- Hidden input for parent comment.id -->
+            <input type="hidden" name="parent_id" value="{{ comment.id }}">
+
+            
    
             
     </div>

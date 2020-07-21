@@ -60,7 +60,7 @@ class Comment(models.Model):
 
     
     def __str__(self):
-        return 'Comment by {}'.format(self.name)
+        return self.title
 
 
 
