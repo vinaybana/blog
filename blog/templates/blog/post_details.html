@@ -13,17 +13,14 @@
         <h2>{{ post.title }}</h2>
         <p>{{ post.text|linebreaksbr }}</p>
     </div>
-    
-    <a class="btn btn-default" href="{% url 'blog:add_comment_to_post' slug=post.slug %}">Add comment</a>
+
     {% for comment in post.comments.all %}
     <div class="comment">
         <div class="date">
             {{ comment.created }}
         </div>
         <strong>{{ comment.name }}</strong>
-        <p>{{ comment.text|linebreaks }}</p>
-
-            <a class="btn btn-default" href="{% url 'blog:add_comment_to_post' slug=post.slug %}">Add reply</a>
+        <p>{{ comment.text|linebreaks }}</p>  
 
             {% for replay in comment.replies.all %}
                 <div class="replay">
@@ -32,14 +29,20 @@
                     </div>
                     <strong>{{ replay.name }}</strong>
                     <p>{{ replay.text|linebreaks }}</p>
+                </div>
             {% endfor %}
-
             <!-- Hidden input for parent comment.id -->
             <input type="hidden" name="parent_id" value="{{ comment.id }}">
 
-            
-   
-            
+    
+        <form method="POST" class="post-form">{% csrf_token %}>
+            {{ form.as_p }}
+            <label for="name"> Name:</label><br>
+            <input type="text" id="name" placeholder="enter your name"><br>
+            <label for="replay"> Replay:</label><br>
+            <input type="text" id="replay" placeholder="enter your replay"><br><br>
+            <input type="submit" value="Submit">
+        </form>        
     </div>
     {% empty %}
         <p>No comments here yet :(</p>
