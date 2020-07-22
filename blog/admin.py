@@ -6,7 +6,7 @@ class postAdmin(admin.ModelAdmin):
 	
 	view_on_site = True
 	fieldsets = [
-		(None, {'fields': ['title', 'text', 'author', 'tag', 'category', 'slug', 'cmnt']}),
+		(None, {'fields': ['title', 'text', 'author', 'tag', 'category', 'cmnt']}),
 		('Date information', {'fields': ['published_date'], 'classes': ['collapse']}),
 
 	]

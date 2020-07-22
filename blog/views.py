@@ -36,6 +36,17 @@ def post_list(request):
 
 def post_detail(request, slug):
 	post = get_object_or_404(Post, slug=slug)
+	if request.method == "POST":
+		form = CommentForm(request.POST)
+		if form.is_valid():	
+			comment=form.save(commit=False)
+			comment.post=post
+			comment.save()
+			
+			return redirect('blog:post_detail', slug=post.slug)
+
+	else:
+		form = CommentForm()
 	return render(request, 'blog/post_details.html', {'post': post})
 
 def post_new(request):
@@ -77,41 +88,6 @@ def tag_details(request, slug):
 	print(tag)
 	posts=Post.objects.filter(tag__slug=tag)
 	return render(request, 'blog/tag_details.html', {'tag':tag, 'posts': posts})
-
-def add_comment_to_post(request, slug):
-	post = get_object_or_404(Post, slug=slug)
-	if request.method == "POST":
-		form = CommentForm(request.POST)
-		if form.is_valid():	
-			parent_obj = None
-			# get parent comment id from hidden input
-			try:
-				# id integer e.g. 15
-				parent_id = int(request.POST.get('comment.id'))
-			except:
-				parent_id = None
-			# if parent_id has been submitted get parent_obj id
-			if parent_id:
-				print(parent_id)
-				parent_obj = Comment.objects.get(id=parent_id)
-				# if parent object exist
-				if parent_obj:
-					print(parent_obj)
-					# create replay comment object
-					replay = form.save(commit=False)
-					# assign parent_obj to replay comment
-					replay.parent = parent_obj
-					replay.save()
-
-			new_comment=form.save(commit=False)
-			new_comment.post=post
-			new_comment.save()
-			
-			return redirect('blog:post_detail', slug=post.slug)
-
-	else:
-		form = CommentForm()
-	return render(request, 'blog/add_comment_to_post.html', {'form': form, 'post':post})
 
 
 def cmnt(request, slug):

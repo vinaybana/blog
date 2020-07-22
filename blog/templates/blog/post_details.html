@@ -14,12 +14,12 @@
         <p>{{ post.text|linebreaksbr }}</p>
     </div>
 
-    <form method="POST" class="post-form">{% csrf_token %}>
+    <form method="POST" class="Comment-form">{% csrf_token %}>
         {{ form.as_p }}
-        <label for="name"> Name:</label><br>
-        <input type="text" id="name" placeholder="enter your name"><br>
-        <label for="replay"> Replay:</label><br>
-        <input type="text" id="replay" placeholder="enter your replay"><br><br>
+        <label for="name">Name:</label><br>
+        <input type="text" name="name" placeholder="enter your name"><br>
+        <label for="replay"> comment:</label><br>
+        <input type="text" name="comment" placeholder="enter your text"><br><br>
         <input type="submit" value="Add Comment">
     </form> 
 
@@ -37,11 +37,11 @@
                         {{ replay.created }}
                     </div>
                     <strong>{{ replay.name }}</strong>
-                    <p>{{ replay.text|linebreaks }}</p>
+                    <p>{{ replay.text|linebreaks }}</p> 
                 </div>
             {% endfor %}
-            <!-- Hidden input for parent comment.id -->
-            <input type="hidden" name="parent_id" value="{{ comment.id }}">       
+        <!-- Hidden input for parent comment.id -->
+        <input type="hidden" name="parent_id" value="{{ comment.id }}">       
     </div>
     {% empty %}
         <p>No comments here yet :(</p>
