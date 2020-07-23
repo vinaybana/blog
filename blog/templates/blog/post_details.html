@@ -1,3 +1,4 @@
+
 {% extends 'blog/base.html' %}
 
 {% block content %}
@@ -13,37 +14,31 @@
         <h2>{{ post.title }}</h2>
         <p>{{ post.text|linebreaksbr }}</p>
     </div>
-
-    <form method="POST" class="Comment-form">{% csrf_token %}>
+   
+    <h3> Leave a comment</h3>
+    <form method="POST" id="commentform">{% csrf_token %}>
         {{ form.as_p }}
-        <label for="name">Name:</label><br>
-        <input type="text" name="name" placeholder="enter your name"><br>
-        <label for="replay"> comment:</label><br>
-        <input type="text" name="comment" placeholder="enter your text"><br><br>
-        <input type="submit" value="Add Comment">
-    </form> 
+        <input type="submit" value="submit Comment">
+    </form>
 
-    {% for comment in post.comments.all %}
-    <div class="comment">
-        <div class="date">
-            {{ comment.created }}
-        </div>
-        <strong>{{ comment.name }}</strong>
-        <p>{{ comment.text|linebreaks }}</p>  
 
-            {% for replay in comment.replies.all %}
-                <div class="replay">
-                    <div class="date">
-                        {{ replay.created }}
-                    </div>
-                    <strong>{{ replay.name }}</strong>
-                    <p>{{ replay.text|linebreaks }}</p> 
-                </div>
-            {% endfor %}
-        <!-- Hidden input for parent comment.id -->
-        <input type="hidden" name="parent_id" value="{{ comment.id }}">       
+    <div class="container">
+        <div class="row">
+            {% for Comment in post.comments.all %}
+                <div class="comment">
+                    <strong>{{ Comment.name }}</strong>
+                    <p>{{ Comment.text|linebreaks }}</p> 
+                </div> 
+                <div>
+                <h3> Reply</h3>
+                <form method="POST" id="commentform">{% csrf_token %}>
+                    {{ form.as_p }}
+                    <input type="hidden" name="Comment_id" value="{{Comment.id}}">
+                    <input type="submit" value="submit reply">   
+                </form>
+                {% empty %}
+                    <p>No comments here yet :(</p>
+            {% endfor %}         
+        </div>             
     </div>
-    {% empty %}
-        <p>No comments here yet :(</p>
-    {% endfor %}
 {% endblock %}

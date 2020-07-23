@@ -39,15 +39,18 @@ def post_detail(request, slug):
 	if request.method == "POST":
 		form = CommentForm(request.POST)
 		if form.is_valid():	
-			comment=form.save(commit=False)
-			comment.post=post
-			comment.save()
-			
+			text= request.POST.get('text')
+			name= request.POST.get('name')
+			reply_id=request.POST.get('Comment_id', None)
+			cmnt_obj = Comment.objects.create(post=post, text=text, name=name)
+			if reply_id:
+				cmnt_obj.parent_id = int(reply_id)
+				cmnt_obj.save()
 			return redirect('blog:post_detail', slug=post.slug)
 
 	else:
 		form = CommentForm()
-	return render(request, 'blog/post_details.html', {'post': post})
+	return render(request, 'blog/post_details.html', {'form':form , 'post': post})
 
 def post_new(request):
 	if request.method == "POST":
