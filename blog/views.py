@@ -36,21 +36,29 @@ def post_list(request):
 
 def post_detail(request, slug):
 	post = get_object_or_404(Post, slug=slug)
+	comments=Comment.objects.filter(post=post, parent=None)
+	new_comment=None
 	if request.method == "POST":
 		form = CommentForm(request.POST)
 		if form.is_valid():	
 			text= request.POST.get('text')
 			name= request.POST.get('name')
-			reply_id=request.POST.get('Comment_id', None)
-			cmnt_obj = Comment.objects.create(post=post, text=text, name=name)
+			reply_id=request.POST.get('comment_id')
+			print(name)
+			print(text)
+			print(reply_id)
+			comment_obj=None
 			if reply_id:
-				cmnt_obj.parent_id = int(reply_id)
-				cmnt_obj.save()
+				comment_obj=Comment.objects.get(id=reply_id)
+			print(comment_obj)
+			
+			new_comment = Comment.objects.create(post=post, parent=comment_obj, text=text, name=name)
+			new_comment.save()
 			return redirect('blog:post_detail', slug=post.slug)
 
 	else:
 		form = CommentForm()
-	return render(request, 'blog/post_details.html', {'form':form , 'post': post})
+	return render(request, 'blog/post_details.html', {'form':form , 'post': post, 'comments':comments})
 
 def post_new(request):
 	if request.method == "POST":
