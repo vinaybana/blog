@@ -44,13 +44,9 @@ def post_detail(request, slug):
 			text= request.POST.get('text')
 			name= request.POST.get('name')
 			reply_id=request.POST.get('comment_id')
-			print(name)
-			print(text)
-			print(reply_id)
 			comment_obj=None
 			if reply_id:
 				comment_obj=Comment.objects.get(id=reply_id)
-			print(comment_obj)
 			
 			new_comment = Comment.objects.create(post=post, parent=comment_obj, text=text, name=name)
 			new_comment.save()
